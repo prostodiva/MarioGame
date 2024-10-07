@@ -14,12 +14,19 @@ public class Window {
     private String title;
     private long glfwWindow;
 
+    private float r, g, a, b;
+    private boolean fadeToBlack = false;
+
     public static Window window = null;
 
     private Window() {
         this.height = 1080;
         this.width = 1920;
         this.title = "Mario";
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
     }
 
     public static Window get() {
@@ -35,6 +42,14 @@ public class Window {
 
         init();
         loop();
+
+        //free the memory
+        // glfwFreeCallbacks(glfwWindow); //doesn't work . do I need that?
+        glfwDestroyWindow(glfwWindow);
+
+        //Terminate GLFW and the free the error callback
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
     }
 
     public void init() {
@@ -57,6 +72,11 @@ public class Window {
         if (glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
+        //:: shirt for the lambda
+        glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
+        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
         //make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
@@ -79,8 +99,21 @@ public class Window {
             //poll event
             glfwPollEvents();
 
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            //test the function
+            if(fadeToBlack) {
+                r = Math.max(r - 0.01f, 0);
+                g = Math.max(r - 0.01f, 0);
+                b = Math.max(r - 0.01f, 0);
+                a = Math.max(r - 0.01f, 0);
+            }
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                fadeToBlack = true;
+            }
+            
+
 
             glfwSwapBuffers(glfwWindow);
 
