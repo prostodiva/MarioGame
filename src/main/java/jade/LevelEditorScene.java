@@ -22,6 +22,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import render.Shader;
+import util.Time;
 
 public class LevelEditorScene extends Scene{
 
@@ -96,9 +97,12 @@ public class LevelEditorScene extends Scene{
     @Override
     public void update(float dt) {
         camera.position.x -= dt * 50.0f;
+        camera.position.y -= dt * 20.0f;
+
         defaultShader.use();
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
         //bind the VAO that we're using
         glBindVertexArray(vaoID);
 

@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32ba9bd-6d81-4f2a-aa94-362dc649027e" name="Changes" comment="Mario Java game">
-      <change afterPath="$PROJECT_DIR$/src/main/java/jade/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/shaders/default.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/default.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jade/LevelEditorScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jade/LevelEditorScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jade/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jade/Scene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/render/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/render/Shader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,7 +158,7 @@
       <workItem from="1728785491496" duration="141000" />
       <workItem from="1728786024094" duration="929000" />
       <workItem from="1728787162911" duration="1573000" />
-      <workItem from="1728792553926" duration="2865000" />
+      <workItem from="1728792553926" duration="5596000" />
     </task>
     <task id="LOCAL-00001" summary="Mario Java game">
       <option name="closed" value="true" />
