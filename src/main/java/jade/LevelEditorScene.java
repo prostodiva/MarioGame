@@ -1,15 +1,26 @@
 package jade;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-import static org.lwjgl.opengl.GL15.*;
+import render.Shader;
 
 public class LevelEditorScene extends Scene{
 
@@ -57,59 +68,16 @@ public class LevelEditorScene extends Scene{
     };
 
     private int vaoID, vboID, eboID;
-                
+
+    private Shader defaultShader;
     public LevelEditorScene() {
-    
+
     }
 
     @Override
     public void init() {
-        //compile and link shaders
-        // first load and compile the vertex shader
-        vertexID = glCreateShader(GL_VERTEX_SHADER);
-        //pass the shader source code
-        glShaderSource(vertexID, vertexShaderSrc);
-        glCompileShader(vertexID);
-
-        //check for errors in compilation process
-        int success = glGetShaderi(vertexID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tVertexnshader compilation failed.");
-            System.out.println(glGetShaderInfoLog(vertexID, len));
-            assert false : " ";
-        }
-
-        //compile and link shaders
-        // first load and compile the fragment shader
-        fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-        //pass the shader source code
-        glShaderSource(fragmentID, fragmentShaderSrc);
-        glCompileShader(fragmentID);
-
-        //check for errors in compilation process
-        success = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tFragmentnshader compilation faled.");
-            System.out.println(glGetShaderInfoLog(fragmentID, len));
-            assert false : " ";
-        }
-
-        //link shaders and check for errors
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexID);
-        glAttachShader(shaderProgram, fragmentID);
-        glLinkProgram(shaderProgram);
-
-        //check for linking errors
-        success = glGetProgrami(shaderProgram, GL_LINK_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tLinking shaders faled.");
-            System.out.println(glGetProgramInfoLog(shaderProgram, len));
-            assert false : " ";
-        }
+       defaultShader = new Shader("assets/shaders/default.glsl");
+       defaultShader.compile();
 
         //generate VAO, VBO, EBO
         vaoID = glGenVertexArrays();
@@ -124,7 +92,7 @@ public class LevelEditorScene extends Scene{
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
 
-        // create the indicies and upload
+        // create the indicates and upload
         IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
         elementBuffer.put(elementArray).flip();
 
@@ -146,8 +114,7 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void update(float dt) {
-        //bind shader program
-        glUseProgram(shaderProgram);
+        defaultShader.use();
         //bind the VAO that we're using
         glBindVertexArray(vaoID);
 
@@ -163,7 +130,7 @@ public class LevelEditorScene extends Scene{
 
         glBindVertexArray(0);
 
-        glUseProgram(0);
+        defaultShader.detach();
 
     }
 }
